@@ -28,7 +28,7 @@ window.addEventListener('appinstalled', (event) => {
 if (process.env.NODE_ENV === 'production') {
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker
-      .register('./sw.js') // Changed from './src-sw.js' to './sw.js'
+      .register('./sw.js') 
       .then((registration) => {
         console.log('Service Worker registered with scope:', registration.scope);
       })

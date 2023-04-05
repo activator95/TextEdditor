@@ -1,33 +1,67 @@
-const butInstall = document.getElementById('buttonInstall');
-let deferredPrompt;
-window.addEventListener('beforeinstallprompt', (event) => {
-  event.preventDefault();
-  deferredPrompt = event;
-  butInstall.style.display = 'block';
-});
-// Implement a click event handler on the `butInstall` element so when you click it will do what you click on
-butInstall.addEventListener('click', async () => {
-  if (deferredPrompt) {
-    butInstall.style.display = 'none';
-    deferredPrompt.prompt();
-    const { outcome } = await deferredPrompt.userChoice;
-    console.log(`User accepted the install prompt: ${outcome === 'accepted'}`);
-    deferredPrompt = null;
-  }
-});
-window.addEventListener('appinstalled', (event) => {
-  console.log('App installed successfully');
-  butInstall.style.display = 'none';
-});
-if (process.env.NODE_ENV === 'production') {
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker
-      .register('./sw.js')
-      .then((registration) => {
-        console.log('Service Worker registered with scope:', registration.scope);
-      })
-      .catch((error) => {
-        console.error('Service Worker registration failed:', error);
-      });
-  }
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const WebpackPwaManifest = require('webpack-pwa-manifest');
+const path = require('path');
+const { InjectManifest } = require('workbox-webpack-plugin');
+
+const isProduction = process.env.NODE_ENV === 'production';
+
+const config = {
+  mode: isProduction ? 'production' : 'development',
+  entry: {
+    main: './src/js/index.js',
+    install: './src/js/install.js',
+  },
+  output: {
+    filename: '[name].bundle.js',
+    path: path.resolve(__dirname, 'dist'),
+  },
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: './index.html',
+    }),
+    new WebpackPwaManifest({
+      name: 'Text Editor PWA',
+      short_name: 'TextEditor',
+      description: 'A simple text editor that runs in the browser',
+      background_color: '#ffffff',
+      crossorigin: 'use-credentials',
+      icons: [
+        {
+          src: path.resolve(__dirname, 'src/images/logo.png'),
+          sizes: [96, 128, 192, 256, 384, 512],
+          destination: path.join('assets', 'icons'),
+        },
+      ],
+    }),
+  ],
+
+  module: {
+    rules: [
+      {
+        test: /\.css$/,
+        use: ['style-loader', 'css-loader'],
+      },
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['@babel/preset-env'],
+          },
+        },
+      },
+    ],
+  },
+};
+
+if (isProduction) {
+  config.plugins.push(
+    new InjectManifest({
+      swSrc: './src-sw.js',
+      swDest: 'sw.js',
+    })
+  );
 }
+
+module.exports = config;
