@@ -71,7 +71,7 @@ export const getDb = async () => {
 (async () => {
   try {
     // Add some content to the database
-    const isAdded = await putDb('Hello, world!');
+    const isAdded = await putDb('Pizza Party!');
 
     // Log a message indicating whether the content was added successfully or not
     if (isAdded) {

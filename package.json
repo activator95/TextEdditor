@@ -4,10 +4,9 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "start:dev": "concurrently \"npm run server\" \"cd client && npm run dev\"",
-    "start": "node server/server.js",
-    "server": "nodemon server/server.js",
-    "build": "cd client && NODE_ENV=production npm run build",
+    "start": "node server.js",
+    "start:dev": "nodemon server.js",
+    "build": "cd client && npm install && npm run build",
     "client": "cd client && npm start",
     "client:dev": "cd client && NODE_ENV=development npm run dev",
     "client:prod": "cd client && NODE_ENV=production npm run build"
@@ -17,7 +16,9 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.17.1",
-    "if-env": "^1.0.4"
+    "if-env": "^1.0.4",
+    "webpack": "^5.0.0",
+    "webpack-cli": "^4.0.0"
   },
   "devDependencies": {
     "concurrently": "^5.3.0",
