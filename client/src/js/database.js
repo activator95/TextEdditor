@@ -77,7 +77,7 @@ export const getDb = async () => {
     if (isAdded) {
       console.log('Content added to the database');
     } else {
-      console.log('Failed to add content to the database');
+      console.log('Failed to add to the database');
     }
 
     // Get all the content from the database

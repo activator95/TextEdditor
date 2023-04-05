@@ -15,7 +15,7 @@ export default class {
 
     // Check if CodeMirror is loaded, if not throw an error
     if (typeof CodeMirror === 'undefined') {
-      throw new Error('CodeMirror is not loaded');
+      throw new Error('not loaded');
     }
 
     // Create a new CodeMirror editor instance
@@ -52,7 +52,7 @@ export default class {
 
     // Save the content of the editor to indexedDB when it loses focus
     this.editor.on('blur', () => {
-      console.log('The editor has lost focus');
+      console.log('The editor has lost conection');
       putDb(localStorage.getItem('content'));
     });
   }

@@ -14,14 +14,14 @@ butInstall.addEventListener('click', async () => {
     butInstall.style.display = 'none';
     deferredPrompt.prompt();
     const { outcome } = await deferredPrompt.userChoice;
-    console.log(`User accepted the install prompt: ${outcome === 'accepted'}`);
+    console.log(`accepted install prompt: ${outcome === 'accepted'}`);
     deferredPrompt = null;
   }
 });
 
 // Add a handler for the `appinstalled` event
 window.addEventListener('appinstalled', (event) => {
-  console.log('App installed successfully');
+  console.log('installed successfull');
   butInstall.style.display = 'none';
 });
 
@@ -30,10 +30,10 @@ if (process.env.NODE_ENV === 'production') {
     navigator.serviceWorker
       .register('./src-sw.js') 
       .then((registration) => {
-        console.log('Service Worker registered with scope:', registration.scope);
+        console.log('Service Worker :', registration.scope);
       })
       .catch((error) => {
-        console.error('Service Worker registration failed:', error);
+        console.error('registration failed:', error);
       });
   }
 }
